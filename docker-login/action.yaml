@@ -1,0 +1,18 @@
+---
+name: "Docker - Login"
+description: This action runs `docker login` for docker hub.
+inputs:
+  dockerhub_username:
+    description: "DockerHub username"
+    required: true
+  dockerhub_token:
+    description: "DockerHub password token"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: "docker/login-action@v1"
+      with:
+        username: ${{ inputs.dockerhub_username }}
+        password: "${{ inputs.dockerhub_token }}"
+        ecr: false
