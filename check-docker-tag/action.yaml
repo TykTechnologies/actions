@@ -2,8 +2,7 @@
 name: "Check docker tag exists"
 description: |
   Checks whether a particular image tag exists in any of the
-  private/public repo on DockerHub.
-
+  private/public repos on DockerHub.
 inputs:
   registry_name:
     description: "Registry name"
@@ -11,13 +10,6 @@ inputs:
   tag:
     description: "Tag of the image"
     required: true
-  registry_username:
-    description: "Registry username"
-    required: true
-  registry_password:
-    description: "Registry password"
-    required: true
-
 runs:
   using: "composite"
   steps:
@@ -30,13 +22,6 @@ runs:
         sudo service docker restart
         docker version -f '{{.Client.Experimental}}'
         docker version -f '{{.Server.Experimental}}'
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ inputs.registry_username }}
-        password: ${{ inputs.registry_password }}
-        ecr: false
 
     - name: Check tag availability
       shell: bash
