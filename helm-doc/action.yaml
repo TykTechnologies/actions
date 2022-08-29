@@ -1,0 +1,25 @@
+---
+name: "Docs for Helm Charts"
+description: |
+  This action ensures that helm values and docs are
+  up to date.
+inputs:
+  chart-doc-version:
+    description: The version of chart doc gen to use
+    required: false
+    default: 0.4.2
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        curl -L https://github.com/kubepack/chart-doc-gen/releases/download/v${{ inputs.chart-doc-version }}/chart-doc-gen-linux-amd64 > chart-doc-gen
+        chmod +x chart-doc-gen
+
+    - shell: bash
+      run: |
+        ./chart-doc-gen -t=./docs/readme.tpl -d=./docs/doc.yaml -v=./values.yaml > ./README.md
+        if !(git diff --exit-code HEAD); then
+          echo "Please run chart-doc-gen to update the documentation and commit changes!" >&2
+          exit 1;
+        fi

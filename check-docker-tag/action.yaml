@@ -1,7 +1,7 @@
 ---
 name: "Check docker tag exists"
 description: |
-  Checks whether a particular image tag exists in any of the
+  This action checks whether a particular image tag exists in any of the
   private/public repos on DockerHub.
 inputs:
   registry_name:
@@ -13,18 +13,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Enable experimental features for the Docker daemon and CLI
-      shell: bash
+    - shell: bash
       run: |
-        echo $'{\n "experimental": true\n}' | sudo tee /etc/docker/daemon.json
-        mkdir -p ~/.docker
-        echo $'{\n "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
-        sudo service docker restart
-        docker version -f '{{.Client.Experimental}}'
-        docker version -f '{{.Server.Experimental}}'
+        tmp=$(mktemp)
+        sudo jq '.+{experimental:true}' /etc/docker/daemon.json > "$tmp"
+        sudo mv "$tmp" /etc/docker/daemon.json
+        sudo systemctl restart docker.service
 
-    - name: Check tag availability
-      shell: bash
+    - shell: bash
       run: |
         STATUS=$(curl -s -f -o /dev/null -w "%{http_code}" https://hub.docker.com/v2/repositories/${{ inputs.registry_name }}/tags/${{ inputs.tag }}/)
         if [ "${STATUS}" == "200" ]; then
