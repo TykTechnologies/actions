@@ -70,7 +70,7 @@ runs:
         file: ${{ inputs.file }}
         platforms: ${{ inputs.platforms }}
         push: ${{ inputs.push }}
-        tags: ${{ inputs.tags }}
+        tags: ${{ steps.meta.outputs.labels }}:${{ inputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=local,src=/tmp/.buildx-cache-${{ inputs.repository_name }}
         cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-${{ inputs.repository_name }}-new
