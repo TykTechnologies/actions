@@ -62,7 +62,7 @@ runs:
         images: tykio/${{ inputs.repository_name }}
         tags: |
           type=sha
-          type=semver,pattern=v{{version}}
+          type=semver,pattern=v{{version}},value=${{ inputs.tags }}
 
     - uses: docker/build-push-action@v4
       with:
@@ -70,7 +70,7 @@ runs:
         file: ${{ inputs.file }}
         platforms: ${{ inputs.platforms }}
         push: ${{ inputs.push }}
-        tags: ${{ steps.meta.outputs.labels }}:${{ inputs.tags }}
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=local,src=/tmp/.buildx-cache-${{ inputs.repository_name }}
         cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-${{ inputs.repository_name }}-new
