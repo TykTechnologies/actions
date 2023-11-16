@@ -62,7 +62,7 @@ runs:
         images: tykio/${{ inputs.repository_name }}
         tags: |
           type=sha
-          type=semver,pattern=v{{version}},value=${{ inputs.tags }}
+          type=semver,pattern={{raw}},value=${{ inputs.tags }}
 
     - uses: docker/build-push-action@v4
       with:
