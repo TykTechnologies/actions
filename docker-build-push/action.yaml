@@ -22,7 +22,7 @@ inputs:
 
   dockerfile:
     description: "Path to the Dockerfile"
-    required: true
+    required: false
 
   cache:
     description: "Docker build cache"
@@ -67,7 +67,7 @@ runs:
     - uses: docker/build-push-action@v4
       with:
         context: ${{ inputs.context }}
-        file: ${{ inputs.file }}
+        file: ${{ inputs.dockerfile }}
         platforms: ${{ inputs.platforms }}
         push: ${{ inputs.push }}
         tags: ${{ steps.meta.outputs.tags }}
