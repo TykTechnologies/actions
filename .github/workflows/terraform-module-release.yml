@@ -31,7 +31,7 @@ jobs:
                   ]
                 }],
                 ["@semantic-release/github", {
-                  "successComment": ":tada: This is included in version ${nextRelease.version} :tada:",
+                  "successComment": ":tada: This is included in version \${nextRelease.version} :tada:",
                   "labels": false
                 }]
               ]

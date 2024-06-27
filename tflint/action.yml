@@ -18,16 +18,16 @@ runs:
 
     - run: |
         cat <<EOF >  .tflint.hcl
-          plugin "aws" {
-            enabled = true
-            version = "0.32.0"
-            source  = "github.com/terraform-linters/tflint-ruleset-aws"
-          }
+        plugin "aws" {
+          enabled = true
+          version = "0.32.0"
+          source  = "github.com/terraform-linters/tflint-ruleset-aws"
+        }
 
-          rule "terraform_naming_convention" {
-            enabled = true
-            format = "snake_case"
-          }
+        rule "terraform_naming_convention" {
+          enabled = true
+          format = "snake_case"
+        }
         EOF
       shell: bash
 
