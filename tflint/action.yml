@@ -16,14 +16,25 @@ runs:
         path: ~/.tflint.d/plugins
         key: tflint-${{ hashFiles('./config/.tflint.hcl') }}
 
-    - uses: terraform-linters/setup-tflint@v2
-      name: Setup TFLint
-      with:
-        tflint_version: v0.51.1
+    - run: |
+        cat <<EOF >  .tflint.hcl
+          plugin "aws" {
+            enabled = true
+            version = "0.32.0"
+            source  = "github.com/terraform-linters/tflint-ruleset-aws"
+          }
+
+          rule "terraform_naming_convention" {
+            enabled = true
+            format = "snake_case"
+          }
+        EOF
+      shell: bash
 
     - name: tflint
       uses: reviewdog/action-tflint@v1
       with:
         github_token: ${{ inputs.github_token }}
         fail_on_error: "true" # Optional. Fail action if errors are found
-#        level: warning
+        tflint_init: true
+        level: warning
