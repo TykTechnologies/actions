@@ -10,6 +10,7 @@ runs:
   using: "composite"
   steps:
     - name: Run test
+      shell: bash
       run: |
         mkdir -p $TF_PLUGIN_CACHE_DIR
         cat <<EOF > provider.ci.tf
@@ -17,7 +18,16 @@ runs:
           provider "kubernetes" {}
           provider "helm" {}
         EOF
-          terraform fmt -write=true provider.ci.tf
-          terraform init
-          terraform validate
-          terraform fmt -check -recursive -diff .
+        terraform fmt -write=true provider.ci.tf
+
+    - name: Terraform init
+      shell: bash
+      run: terraform init
+
+    - name: Terraform validate
+      shell: bash
+      run: terraform validate
+
+    - name: Terraform fmt
+      shell: bash
+      run: terraform fmt -check -recursive -diff .

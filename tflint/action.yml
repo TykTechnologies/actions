@@ -27,13 +27,16 @@ runs:
 
     - name: Show version
       run: tflint --version
+      shell: bash
 
     - name: Init TFLint
       run: tflint --init
+      shell: bash
 
     - name: Run TFLint
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
+      shell: bash
       run: |
         tflint -c $(pwd)/config/.tflint.hcl  --force -f=checkstyle . > "results.xml"
         cat results.xml | reviewdog -f=checkstyle -name="TFLint" -reporter=github-pr-check -level=warning
