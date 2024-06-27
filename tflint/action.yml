@@ -19,7 +19,7 @@ runs:
     - uses: terraform-linters/setup-tflint@v2
       name: Setup TFLint
       with:
-        tflint_version: v0.47.0
+        tflint_version: v0.51.1
 
     - uses: reviewdog/action-setup@v1
       with:
@@ -38,5 +38,5 @@ runs:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
       shell: bash
       run: |
-        tflint -c $(pwd)/config/.tflint.hcl  --force -f=checkstyle . > "results.xml"
+        tflint -c $(pwd)/config/.tflint.hcl  --force -f=checkstyle > "results.xml"
         cat results.xml | reviewdog -f=checkstyle -name="TFLint" -reporter=github-pr-check -level=warning
