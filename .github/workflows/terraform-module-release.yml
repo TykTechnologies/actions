@@ -10,11 +10,35 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Create Semantic Release config
+        run: |
+          cat <<EOF > .releaserc.json
+            {
+              "branches": ["main", "master"],
+              "plugins": [
+                ["@semantic-release/commit-analyzer", {
+                  "preset": "angular",
+                  "releaseRules": [
+                    {"type": "ci", "release": false},
+                    {"type": "CI", "release": false},
+                    {"scope": "no-release", "release": false},
+                    {"message": "*", "release": "minor"}
+                  ]
+                }],
+                ["@semantic-release/github", {
+                  "successComment": ":tada: This is included in version ${nextRelease.version} :tada:",
+                  "labels": false
+                }]
+              ]
+            }
+          EOF
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          dry_run: true
+          ci: false
           branches: |
             [
               'master',
