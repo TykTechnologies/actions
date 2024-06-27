@@ -19,7 +19,7 @@ runs:
     - uses: terraform-linters/setup-tflint@v2
       name: Setup TFLint
       with:
-        tflint_version: v0.51.1
+        tflint_version: v0.47.0
 
     - uses: reviewdog/action-setup@v1
       with:
