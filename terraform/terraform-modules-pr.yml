@@ -1,0 +1,76 @@
+---
+name: Test
+on:
+  pull_request:
+
+jobs:
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/cache@v4
+        name: Cache plugin dir
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('.tflint.hcl') }}
+
+      - uses: terraform-linters/setup-tflint@v2
+        name: Setup TFLint
+        with:
+          tflint_version: v0.47
+
+      - uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: v0.18.1
+
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tflint_config=$(pwd)/.tflint.hcl
+          tflint -c $tflint_config --force -f=checkstyle . > "results.xml"
+          cat results.xml | reviewdog -f=checkstyle -name="TFLint" -reporter=github-pr-check -level=warning
+  formatter:
+    name: Formatter
+    runs-on: ubuntu-latest
+    env:
+      TF_PLUGIN_CACHE_DIR: /tmp/.terraform/plugins
+      TERRAFORM_VERSION: 0.12.31
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: v0.18.1
+
+      - name: Run test
+        run: |
+          mkdir -p $TF_PLUGIN_CACHE_DIR
+          cat <<EOF > provider.ci.tf
+            provider "aws" {}
+            provider "kubernetes" {}
+            provider "helm" {}
+          EOF
+            terraform fmt -write=true provider.ci.tf
+            terraform init
+            terraform validate
+            terraform fmt -check -recursive -diff .
