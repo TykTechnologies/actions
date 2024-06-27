@@ -14,12 +14,12 @@ runs:
       name: Cache plugin dir
       with:
         path: ~/.tflint.d/plugins
-        key: tflint-${{ hashFiles('.tflint.hcl') }}
+        key: tflint-${{ hashFiles('./config/.tflint.hcl') }}
 
     - uses: terraform-linters/setup-tflint@v2
       name: Setup TFLint
       with:
-        tflint_version: v0.47
+        tflint_version: v0.51.1
 
     - uses: reviewdog/action-setup@v1
       with:
