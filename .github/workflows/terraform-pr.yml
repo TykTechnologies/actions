@@ -15,7 +15,7 @@ jobs:
 
       - name: Tflint
         id: tflint
-        uses: TykTechnologies/actions/terraform/tflint@TD-3014-terraform-actions
+        uses: TykTechnologies/actions/tflint@TD-3014-terraform-actions
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
