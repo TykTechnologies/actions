@@ -1,0 +1,41 @@
+---
+name: Test
+on:
+  workflow_call:
+
+jobs:
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Tflint
+        id: tflint
+        uses: TykTechnologies/actions/terraform/tflint@TD-3014-terraform-actions
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  formatter:
+    name: Formatter
+    runs-on: ubuntu-latest
+    env:
+      TF_PLUGIN_CACHE_DIR: /tmp/.terraform/plugins
+      TERRAFORM_VERSION: 0.12.31
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform Format, Lint and Validate
+        id: terraform-format
+        uses: TykTechnologies/actions/terraform-format@TD-3014-terraform-actions
