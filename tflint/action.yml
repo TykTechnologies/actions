@@ -39,3 +39,4 @@ runs:
         tflint_version: v0.51.1
         tflint_init: true
         level: warning
+        flags: "--call-module-type=local"

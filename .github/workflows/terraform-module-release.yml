@@ -2,6 +2,11 @@
 name: Release
 on:
   workflow_call:
+    inputs:
+      dry_run:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   tag:
@@ -37,8 +42,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          dry_run: true
-          ci: false
+          dry_run: ${{ inputs.dry_run }}
+          ci: ${{ ! inputs.dry_run }}
           branches: |
             [
               'master',
