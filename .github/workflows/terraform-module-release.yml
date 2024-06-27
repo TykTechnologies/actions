@@ -7,6 +7,10 @@ on:
         required: false
         type: boolean
         default: false
+      branch:
+        required: false
+        type: string
+        default: main
 
 jobs:
   tag:
@@ -19,7 +23,7 @@ jobs:
         run: |
           cat <<EOF > .releaserc.json
             {
-              "branches": ["main", "master"],
+              "branches": ["${{ inputs.branch }}"],
               "plugins": [
                 ["@semantic-release/commit-analyzer", {
                   "preset": "angular",
@@ -46,6 +50,5 @@ jobs:
           ci: ${{ ! inputs.dry_run }}
           branches: |
             [
-              'master',
-              'main'
+              '${{ inputs.branch }}',
             ]
