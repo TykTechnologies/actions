@@ -21,22 +21,9 @@ runs:
       with:
         tflint_version: v0.51.1
 
-    - uses: reviewdog/action-setup@v1
+    - name: tflint
+      uses: reviewdog/action-tflint@v1
       with:
-        reviewdog_version: v0.18.1
-
-    - name: Show version
-      run: tflint --version
-      shell: bash
-
-    - name: Init TFLint
-      run: tflint --init
-      shell: bash
-
-    - name: Run TFLint
-      env:
-        REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
-      shell: bash
-      run: |
-        tflint -c $(pwd)/config/.tflint.hcl  --force -f=checkstyle > "results.xml"
-        cat results.xml | reviewdog -f=checkstyle -name="TFLint" -reporter=github-pr-check -level=warning
+        github_token: ${{ inputs.github_token }}
+        fail_on_error: "true" # Optional. Fail action if errors are found
+#        level: warning
