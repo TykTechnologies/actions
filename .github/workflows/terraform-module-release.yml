@@ -23,7 +23,7 @@ jobs:
         run: |
           cat <<EOF > .releaserc.json
             {
-              "branches": ["${{ inputs.branch }}"],
+              "branches": ["main", "master", "${{ inputs.branch }}"],
               "plugins": [
                 ["@semantic-release/commit-analyzer", {
                   "preset": "angular",
@@ -51,4 +51,6 @@ jobs:
           branches: |
             [
               '${{ inputs.branch }}',
+              'master',
+              'main',
             ]
