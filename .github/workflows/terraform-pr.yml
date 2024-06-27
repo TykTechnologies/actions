@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Tflint
         id: tflint
@@ -28,8 +26,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
@@ -39,3 +35,16 @@ jobs:
       - name: Terraform Format, Lint and Validate
         id: terraform-format
         uses: TykTechnologies/actions/terraform-format@TD-3014-terraform-actions
+
+  next_version:
+    name: Next Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

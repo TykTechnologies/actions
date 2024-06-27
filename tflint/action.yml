@@ -36,5 +36,6 @@ runs:
       with:
         github_token: ${{ inputs.github_token }}
         fail_on_error: "true" # Optional. Fail action if errors are found
+        tflint_version: v0.51.1
         tflint_init: true
         level: warning
