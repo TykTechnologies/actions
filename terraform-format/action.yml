@@ -14,7 +14,9 @@ runs:
       run: |
         mkdir -p $TF_PLUGIN_CACHE_DIR
         cat <<EOF > provider.ci.tf
-          provider "aws" {}
+          provider "aws" {
+            region = "eu-central-1"
+          }
           provider "kubernetes" {}
           provider "helm" {}
         EOF
