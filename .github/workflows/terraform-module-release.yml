@@ -4,13 +4,13 @@ on:
   workflow_call:
     inputs:
       dry_run:
-        required: true
+        required: false
         type: boolean
         default: false
       ci:
         required: true
         type: boolean
-        default: true
+        default: false
 
 jobs:
   tag:
