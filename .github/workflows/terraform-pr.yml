@@ -36,6 +36,7 @@ jobs:
 
   formatter:
     name: Formatter
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
