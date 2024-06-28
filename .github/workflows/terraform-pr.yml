@@ -19,7 +19,7 @@ jobs:
         run: |
           versions="${{ inputs.terraform_versions }}"
           matrix=$(echo $versions | jq -R 'split(",") | map({terraform_version: .})'| jq -c .)
-          echo "matrix=${matrix}" >> $GITHUB_OUTPUT
+          echo "{\"include\": ${matrix}}" >> $GITHUB_OUTPUT
 
   tflint:
     name: TFLint
