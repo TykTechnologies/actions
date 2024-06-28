@@ -4,6 +4,7 @@ on:
   workflow_call:
     inputs:
       terraform_versions:
+        description: 'Comma-separated Terraform versions'
         required: false
         type: string
         default: "0.12.31"
