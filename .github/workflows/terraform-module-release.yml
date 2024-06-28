@@ -4,9 +4,13 @@ on:
   workflow_call:
     inputs:
       dry_run:
-        required: false
+        required: true
         type: boolean
         default: false
+      ci:
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   tag:
@@ -47,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           dry_run: ${{ inputs.dry_run }}
-          ci: ${{ ! inputs.dry_run }}
+          ci: ${{ inputs.ci }}
           branches: |
             [
               'master',
