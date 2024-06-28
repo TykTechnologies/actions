@@ -45,6 +45,10 @@ jobs:
               ]
             }
           EOF
+      - name: check semantic release config
+        run: cat .releaserc.json
+        shell: bash
+
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         env:
