@@ -26,7 +26,6 @@ jobs:
               "branches": [
                 "main",
                 "master",
-                "${{ github.ref }}",
                 { "name": "refs/pull/*/merge", "prerelease": true }
               ],
               "plugins": [
@@ -35,8 +34,7 @@ jobs:
                   "releaseRules": [
                     {"type": "ci", "release": false},
                     {"type": "CI", "release": false},
-                    {"scope": "no-release", "release": false},
-                    {"message": "*", "release": "minor"}
+                    {"scope": "no-release", "release": false}
                   ]
                 }],
                 ["@semantic-release/github", {
