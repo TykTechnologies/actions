@@ -7,10 +7,6 @@ on:
         required: false
         type: boolean
         default: false
-      branch:
-        required: false
-        type: string
-        default: main
 
 jobs:
   tag:
@@ -23,7 +19,11 @@ jobs:
         run: |
           cat <<EOF > .releaserc.json
             {
-              "branches": ["main", "master", "${{ inputs.branch }}"],
+              "branches": [
+                "main",
+                "master",
+                { "name": "refs/pull/*/merge", "prerelease": true }
+              ],
               "plugins": [
                 ["@semantic-release/commit-analyzer", {
                   "preset": "angular",
@@ -47,10 +47,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           dry_run: ${{ inputs.dry_run }}
-          ci: ${{ ! inputs.dry_run }}
           branches: |
             [
-              '${{ inputs.branch }}',
               'master',
               'main',
+              { "name": "refs/pull/*/merge", "prerelease": true }
             ]
