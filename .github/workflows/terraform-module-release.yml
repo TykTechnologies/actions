@@ -10,7 +10,7 @@ on:
       ci:
         required: true
         type: boolean
-        default: false
+        default: true
 
 jobs:
   tag:
