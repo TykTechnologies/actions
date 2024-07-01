@@ -1,0 +1,42 @@
+---
+name: TFlint
+description: Runs TFLint
+inputs:
+  github_token:
+    description: 'Github Token'
+    required: true
+
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/cache@v4
+      name: Cache plugin dir
+      with:
+        path: ~/.tflint.d/plugins
+        key: tflint-${{ hashFiles('./config/.tflint.hcl') }}
+
+    - run: |
+        cat <<EOF >  .tflint.hcl
+        plugin "aws" {
+          enabled = true
+          version = "0.32.0"
+          source  = "github.com/terraform-linters/tflint-ruleset-aws"
+        }
+
+        rule "terraform_naming_convention" {
+          enabled = true
+          format = "snake_case"
+        }
+        EOF
+      shell: bash
+
+    - name: tflint
+      uses: reviewdog/action-tflint@v1
+      with:
+        github_token: ${{ inputs.github_token }}
+        fail_on_error: "true" # Optional. Fail action if errors are found
+        tflint_version: v0.51.1
+        tflint_init: true
+        level: warning
+        flags: "--call-module-type=local"
