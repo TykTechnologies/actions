@@ -1,0 +1,59 @@
+---
+name: Test
+on:
+  workflow_call:
+    inputs:
+      terraform_versions:
+        description: 'Comma-separated Terraform versions'
+        required: false
+        type: string
+        default: "0.12.31"
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.setup-matrix.outputs.matrix }}
+    steps:
+      - name: Set up Terraform versions matrix
+        id: setup-matrix
+        run: |
+          versions="${{ inputs.terraform_versions }}"
+          matrix=$(echo $versions | jq -R 'split(",") | map({terraform_version: .})'| jq -c .)
+          echo "matrix={\"include\": ${matrix}}" >> $GITHUB_OUTPUT
+
+
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Tflint
+        id: tflint
+        uses: TykTechnologies/actions/tflint@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  formatter:
+    name: Formatter
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    env:
+      TF_PLUGIN_CACHE_DIR: /tmp/.terraform/plugins
+      TERRAFORM_VERSION: 0.12.31
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ matrix.terraform_version }}
+
+      - name: Terraform Format, Lint and Validate
+        id: terraform-format
+        uses: TykTechnologies/actions/terraform-format@main
