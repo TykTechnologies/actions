@@ -56,7 +56,6 @@ jobs:
             [
               'master',
               'main',
-               "${{ github.ref }}",
               { "name": "refs/pull/*/merge", "prerelease": true }
             ]
           semantic_version: 24.0.0

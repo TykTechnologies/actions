@@ -32,7 +32,7 @@ jobs:
 
       - name: Tflint
         id: tflint
-        uses: TykTechnologies/actions/tflint@TD-3014-terraform-actions
+        uses: TykTechnologies/actions/tflint@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,4 +56,4 @@ jobs:
 
       - name: Terraform Format, Lint and Validate
         id: terraform-format
-        uses: TykTechnologies/actions/terraform-format@TD-3014-terraform-actions
+        uses: TykTechnologies/actions/terraform-format@main
