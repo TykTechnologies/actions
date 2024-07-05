@@ -9,6 +9,12 @@ on:
         type: string
         default: "0.12.31"
 
+      before_script:
+        description: 'Extra commands to run before running tests'
+        required: false
+        type: string
+        default: "echo No before script"
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -53,6 +59,12 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ matrix.terraform_version }}
+
+      - name: Before script
+        run: |
+          ${{ inputs.before_script }}
+        shell: bash
+
 
       - name: Terraform Format, Lint and Validate
         id: terraform-format
