@@ -43,3 +43,5 @@ jobs:
             TD-\d+
             TT-\d+
             ${{ inputs.scopes }}
+
+        requireScope: true
