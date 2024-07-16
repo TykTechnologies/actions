@@ -32,6 +32,8 @@ jobs:
                 ["@semantic-release/commit-analyzer", {
                   "preset": "angular",
                   "releaseRules": [
+                    {"type": "TT", "release": minor},
+                    {"type": "TD", "release": minor},
                     {"type": "ci", "release": false},
                     {"type": "CI", "release": false},
                     {"scope": "no-release", "release": false}
