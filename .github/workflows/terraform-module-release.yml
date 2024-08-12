@@ -36,7 +36,8 @@ jobs:
                     {"type": "TD", "release": minor},
                     {"type": "ci", "release": false},
                     {"type": "CI", "release": false},
-                    {"scope": "no-release", "release": false}
+                    {"scope": "no-release", "release": false},
+                    {"message": "*", "release": "minor"}
                   ]
                 }],
                 ["@semantic-release/github", {
