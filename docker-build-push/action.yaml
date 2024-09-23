@@ -78,7 +78,6 @@ runs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         outputs: ${{ inputs.outputs }}
-        outputs: type=docker,dest=/tmp/sre-autopilot-some.tar
         cache-from: type=local,src=/tmp/.buildx-cache-${{ inputs.repository_name }}
         cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-${{ inputs.repository_name }}-new
 
