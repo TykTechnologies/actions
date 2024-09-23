@@ -38,7 +38,7 @@ inputs:
     description: "Repo name on dockerhub"
     required: true
   
-  output:
+  outputs:
     description: "Used to upload the image as a temporary artifact for DEV env"
     default: ""
     required: false
@@ -77,12 +77,13 @@ runs:
         push: ${{ inputs.push }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        # outputs: ${{ inputs.output }}
+        outputs: ${{ inputs.outputs }}
         outputs: type=docker,dest=/tmp/sre-autopilot-some.tar
         cache-from: type=local,src=/tmp/.buildx-cache-${{ inputs.repository_name }}
         cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-${{ inputs.repository_name }}-new
 
     - name: Move cache
+      shell: bash
       run: |
         rm -rf /tmp/.buildx-cache-${{ inputs.repository_name }}
         mv /tmp/.buildx-cache-${{ inputs.repository_name }}-new /tmp/.buildx-cache-${{ inputs.repository_name }}         
