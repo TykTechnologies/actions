@@ -37,6 +37,11 @@ inputs:
   repository_name:
     description: "Repo name on dockerhub"
     required: true
+  
+  outputs:
+    description: "Used to upload the image as a temporary artifact for DEV env"
+    default: ""
+    required: false
 
 runs:
   using: "composite"
@@ -72,6 +77,7 @@ runs:
         push: ${{ inputs.push }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        outputs: ${{ inputs.outputs }}
         cache-from: type=local,src=/tmp/.buildx-cache-${{ inputs.repository_name }}
         cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-${{ inputs.repository_name }}-new
 
