@@ -63,6 +63,7 @@ runs:
         tags: |
           type=sha
           type=semver,pattern={{raw}},value=${{ inputs.tags }}
+          type=raw,value=${{ inputs.tags }}
 
     - uses: docker/build-push-action@v6
       with:
