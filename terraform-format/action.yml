@@ -1,25 +1,52 @@
 ---
 name: Terraform Formatter
 description: Runs terraform validate and format
+
 inputs:
   terraform_version:
     description: 'Terraform version'
     required: true
-    default: 0.12.31
+    default: '0.12.31'
+
 runs:
   using: "composite"
   steps:
-    - name: Run test
+    - name: Write provider file conditionally
       shell: bash
       run: |
-        mkdir -p $TF_PLUGIN_CACHE_DIR
-        cat <<EOF > provider.ci.tf
-          provider "aws" {
-            region = "eu-central-1"
-          }
-          provider "kubernetes" {}
-          provider "helm" {}
-        EOF
+        # Parse major and minor version from the input.
+        TFVERSION="${{ inputs.terraform_version }}"
+        MAJOR="$(echo "${TFVERSION}" | cut -d. -f1)"
+        MINOR="$(echo "${TFVERSION}" | cut -d. -f2)"
+
+        # If major=0 and minor<13 => Terraform is < 0.13
+        if [ "$MAJOR" -eq 0 ] && [ "$MINOR" -lt 13 ]; then
+          cat <<EOF > provider.ci.tf
+            provider "aws" {
+              region = "eu-central-1"
+            }
+
+            provider "kubernetes" {}
+
+            # Pin Helm provider for Terraform < 0.13
+            provider "helm" {
+              version = "~> 0.10"
+            }
+            EOF
+        else
+          # For Terraform >= 0.13, no explicit pin needed
+          cat <<EOF > provider.ci.tf
+            provider "aws" {
+              region = "eu-central-1"
+            }
+
+            provider "kubernetes" {}
+
+            provider "helm" {}
+            EOF
+        fi
+
+        # Format the newly created file
         terraform fmt -write=true provider.ci.tf
 
     - name: Terraform init
