@@ -23,7 +23,7 @@ runs:
         # Decide what to put into the Helm provider block
         HELM_PROVIDER_VERSION=""
         if [ "$MAJOR" -eq 0 ] && [ "$MINOR" -lt 13 ]; then
-          HELM_PROVIDER_VERSION='  version = "~> 0.10"'
+          HELM_PROVIDER_VERSION='  version = "~> 2.0"'
         fi
 
         # Write one provider file, inserting our dynamic Helm version
