@@ -44,10 +44,12 @@ runs:
 
     - name: Terraform init
       shell: bash
-      run: terraform init
+      run: terraform init -backend=false
 
     - name: Terraform validate
       shell: bash
+      env:
+        TF_IN_AUTOMATION: "true"
       run: terraform validate
 
     - name: Terraform fmt
