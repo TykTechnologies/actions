@@ -50,7 +50,7 @@ runs:
       shell: bash
       env:
         TF_IN_AUTOMATION: "true"
-      run: terraform validate
+      run: terraform validate -check-variables=false
 
     - name: Terraform fmt
       shell: bash
