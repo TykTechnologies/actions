@@ -28,9 +28,6 @@ runs:
 
         # Write one provider file, inserting our dynamic Helm version
         cat <<EOF > provider.ci.tf
-        provider "aws" {
-          region = "eu-central-1"
-        }
 
         provider "kubernetes" {}
 
@@ -44,13 +41,11 @@ runs:
 
     - name: Terraform init
       shell: bash
-      run: terraform init -backend=false
+      run: terraform init
 
     - name: Terraform validate
       shell: bash
-      env:
-        TF_IN_AUTOMATION: "true"
-      run: terraform validate -check-variables=false
+      run: terraform validate
 
     - name: Terraform fmt
       shell: bash
