@@ -7,6 +7,10 @@ inputs:
     description: 'Terraform version'
     required: true
     default: 0.12.31
+  TF_TOKEN_app_terraform_io:
+    description: 'Terraform token'
+    required: true
+    default: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
 
 runs:
   using: "composite"
