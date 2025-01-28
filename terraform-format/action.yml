@@ -10,7 +10,6 @@ inputs:
   TF_TOKEN_app_terraform_io:
     description: 'Terraform token'
     required: true
-    default: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
 
 runs:
   using: "composite"
