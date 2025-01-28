@@ -54,7 +54,7 @@ runs:
       shell: bash
       run: terraform validate
       env:
-        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_APP_TERRAFORM_IO }}
+        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
 
     - name: Terraform fmt
       shell: bash
