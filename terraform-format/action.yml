@@ -7,9 +7,9 @@ inputs:
     description: 'Terraform version'
     required: true
     default: 0.12.31
-  # TF_TOKEN_app_terraform_io:
-  #   description: 'Terraform token'
-  #   required: true
+  TF_TOKEN_app_terraform_io:
+    description: 'Terraform token'
+    required: true
 
 runs:
   using: "composite"
@@ -49,12 +49,14 @@ runs:
     - name: Terraform init
       shell: bash
       run: terraform init
+      with:
+        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
 
     - name: Terraform validate
       shell: bash
       run: terraform validate
-      env:
-        TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
+      with:
+        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
 
     - name: Terraform fmt
       shell: bash
