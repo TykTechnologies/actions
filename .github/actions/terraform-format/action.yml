@@ -1,6 +1,5 @@
 name: Terraform Formatter
 description: Runs terraform validate and format
-
 inputs:
   terraform_version:
     description: 'Terraform version'
@@ -12,8 +11,6 @@ inputs:
 
 runs:
   using: "composite"
-  env:
-    TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
   steps:
     - name: Write provider file conditionally
       shell: bash
@@ -48,10 +45,14 @@ runs:
         terraform fmt -write=true provider.ci.tf
 
     - name: Terraform init
+      env:
+        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}    
       shell: bash
       run: terraform init
 
     - name: Terraform validate
+      env:
+        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}    
       shell: bash
       run: terraform validate
 
