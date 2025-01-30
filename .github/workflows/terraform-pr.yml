@@ -42,7 +42,7 @@ jobs:
 
       - name: Tflint
         id: tflint
-        uses: TykTechnologies/actions/tflint@main
+        uses: ./actions/tflint
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -72,7 +72,7 @@ jobs:
 
       - name: Terraform Format, Lint and Validate
         id: terraform-format
-        uses: TykTechnologies/actions/terraform-format@main
+        uses: ./actions/terraform-format
         with:
           terraform_version: ${{ matrix.terraform_version }}
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
