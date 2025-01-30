@@ -13,6 +13,8 @@ inputs:
 
 runs:
   using: "composite"
+  env:
+    TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
   steps:
     - name: Write provider file conditionally
       shell: bash
@@ -49,14 +51,10 @@ runs:
     - name: Terraform init
       shell: bash
       run: terraform init
-      with:
-        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
 
     - name: Terraform validate
       shell: bash
       run: terraform validate
-      with:
-        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
 
     - name: Terraform fmt
       shell: bash
