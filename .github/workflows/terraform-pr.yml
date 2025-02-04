@@ -8,7 +8,11 @@ on:
         required: false
         type: string
         default: "0.12.31"
-
+      testmode:
+        description: 'Flag to indicate if execute action as local should be run'
+        required: false
+        type: boolean
+        default: false
       before_script:
         description: 'Extra commands to run before running tests'
         required: false
@@ -33,11 +37,19 @@ jobs:
     name: TFLint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
+        if: ${{ inputs.testmode }}      
         uses: actions/checkout@v4
+
+      - name: Run composite action
+        if: ${{ inputs.testmode }}
+        uses: ./.github/actions/tflint
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tflint
         id: tflint
+        if: ${{ !inputs.testmode }}
         uses: TykTechnologies/actions/tflint@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -52,8 +64,6 @@ jobs:
       TF_PLUGIN_CACHE_DIR: /tmp/.terraform/plugins
       TERRAFORM_VERSION: 0.12.31
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
@@ -66,6 +76,20 @@ jobs:
         shell: bash
 
 
+      - name: Checkout repository
+        if: ${{ inputs.testmode }}      
+        uses: actions/checkout@v4
+
+      - name: Run composite action
+        if: ${{ inputs.testmode }}
+        uses: ./.github/actions/terraform-format
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}          
+
       - name: Terraform Format, Lint and Validate
+        if: ${{ !inputs.testmode }}
         id: terraform-format
         uses: TykTechnologies/actions/terraform-format@main
+        with:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}

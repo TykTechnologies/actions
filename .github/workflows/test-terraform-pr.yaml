@@ -1,0 +1,13 @@
+name: Test Terraform PR
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    uses: ./.github/workflows/test-terraform-pr.yaml
+    with:
+      terraform_versions: "0.12.29 0.13.6 0.14.11 0.15.0"
+      before_script: "echo 'Running pre-test script'"
+      testmode: true

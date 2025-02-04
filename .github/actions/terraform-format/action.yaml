@@ -1,4 +1,3 @@
----
 name: Terraform Formatter
 description: Runs terraform validate and format
 
