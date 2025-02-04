@@ -1,0 +1,12 @@
+name: Test Terraform PR
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    uses: ./.github/workflows/local-action.yaml
+    with:
+      some-action: "cereza"
+      testmode: true
