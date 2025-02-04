@@ -84,7 +84,6 @@ jobs:
         if: ${{ inputs.testmode }}
         uses: ./.github/actions/terraform-format
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}          
 
       - name: Terraform Format, Lint and Validate
