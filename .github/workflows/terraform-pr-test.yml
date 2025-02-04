@@ -10,7 +10,6 @@ jobs:
     with:
       terraform_versions: "0.12.31,1.0.11,1.4.6"
       before_script: "echo 'Running pre-test script'"
-      branch: ${{ github.head_ref }}
       testmode: true
     secrets:
       TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
