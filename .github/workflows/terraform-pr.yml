@@ -60,6 +60,10 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
+      - name: List directory contents
+        run: ls -la /home/runner/work/actions/actions/tflint_local_test_pr
+  
+
       - name: Tflint_local_test_pr
         id: tflint_local
         if: ${{ inputs.testmode }}
