@@ -63,7 +63,7 @@ jobs:
       - name: Tflint_local_test_pr
         id: tflint_local
         if: ${{ inputs.testmode }}
-        uses: ./.github/actions/tflint_local_test_pr
+        uses: ./tflint_local_test_pr
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -105,7 +105,7 @@ jobs:
       - name: Terraform Format, Lint and Validate
         id: terraform-format_local_pr
         if: ${{ inputs.testmode }}
-        uses: ./.github/actions/terraform-format
+        uses: ./terraform-format
         with:
           terraform_version: ${{ matrix.terraform_version }}
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}     
