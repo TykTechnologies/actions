@@ -40,6 +40,8 @@ jobs:
       - name: Checkout repository
         if: ${{ inputs.testmode }}      
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}        
 
       - name: Run composite action
         if: ${{ inputs.testmode }}
@@ -79,6 +81,8 @@ jobs:
       - name: Checkout repository
         if: ${{ inputs.testmode }}      
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Run composite action
         if: ${{ inputs.testmode }}
