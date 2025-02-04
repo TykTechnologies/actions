@@ -33,28 +33,28 @@ jobs:
           echo "matrix={\"include\": ${matrix}}" >> $GITHUB_OUTPUT
 
 
-  # tflint:
-  #   name: TFLint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       if: ${{ inputs.testmode }}      
-  #       uses: actions/checkout@v4
-  #       with:
-  #         ref: ${{ github.head_ref }}        
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        if: ${{ inputs.testmode }}      
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}        
 
-  #     - name: Run composite action
-  #       if: ${{ inputs.testmode }}
-  #       uses: ./.github/actions/tflint
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run composite action
+        if: ${{ inputs.testmode }}
+        uses: ./.github/actions/tflint
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Tflint
-  #       id: tflint
-  #       if: ${{ !inputs.testmode }}
-  #       uses: TykTechnologies/actions/tflint@main
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tflint
+        id: tflint
+        if: ${{ !inputs.testmode }}
+        uses: TykTechnologies/actions/tflint@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   formatter:
     name: Formatter
@@ -80,8 +80,8 @@ jobs:
       - name: Checkout repository
         if: ${{ inputs.testmode }}      
         uses: actions/checkout@v4
-      #   with:
-      #     ref: ${{ github.head_ref }}
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Run composite action
         if: ${{ inputs.testmode }}
