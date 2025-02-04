@@ -8,7 +8,11 @@ on:
         required: false
         type: string
         default: "0.12.31"
-
+      branch:
+        description: 'Branch to run the tests on'
+        required: false
+        type: string
+        default: "main"
       before_script:
         description: 'Extra commands to run before running tests'
         required: false
@@ -42,7 +46,7 @@ jobs:
 
       - name: Tflint
         id: tflint
-        uses: ./.github/actions/tflint
+        uses: TykTechnologies/actions/tflint@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -72,7 +76,8 @@ jobs:
 
       - name: Terraform Format, Lint and Validate
         id: terraform-format
-        uses: ./.github/actions/terraform-format
+        uses: TykTechnologies/actions/terraform-format@main
         with:
           terraform_version: ${{ matrix.terraform_version }}
+          branch: ${{ inputs.branch }}
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
