@@ -61,13 +61,13 @@ jobs:
           ref: ${{ inputs.branch }}
 
       - name: List directory contents
-        run: ls -la /home/runner/work/actions/actions/tflint_local_test_pr
+        run: ls -lR /home/runner/work/actions
   
 
       - name: Tflint_local_test_pr
         id: tflint_local
         if: ${{ inputs.testmode }}
-        uses: ./tflint_local_test_pr
+        uses: ./github/actions/tflint_local_test_pr
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -109,7 +109,7 @@ jobs:
       - name: Terraform Format, Lint and Validate
         id: terraform-format_local_pr
         if: ${{ inputs.testmode }}
-        uses: ./terraform-format
+        uses: ./.github/actions/terraform-format
         with:
           terraform_version: ${{ matrix.terraform_version }}
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}     
