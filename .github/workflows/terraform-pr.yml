@@ -8,11 +8,6 @@ on:
         required: false
         type: string
         default: "0.12.31"
-      branch:
-        description: 'Branch to run the tests on'
-        required: false
-        type: string
-        default: "main"
       testmode:
         description: 'Flag to indicate if execute action as local should be run'
         required: false
@@ -58,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
         if: ${{ inputs.testmode }}
         with:
-          ref: ${{ inputs.branch }}
+          ref: ${{ github.head_ref }}
 
       - name: List directory contents
         run: ls -lR /home/runner/work/actions
@@ -104,7 +99,7 @@ jobs:
         uses: actions/checkout@v4
         if: ${{ inputs.testmode }}
         with:
-          ref: ${{ inputs.branch }}
+          ref: ${{ github.head_ref }}
 
       - name: Terraform Format, Lint and Validate
         id: terraform-format_local_pr
