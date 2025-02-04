@@ -13,6 +13,11 @@ on:
         required: false
         type: string
         default: "main"
+      testmode:
+        description: 'Flag to indicate if execute action as local should be run'
+        required: false
+        type: boolean
+        default: false
       before_script:
         description: 'Extra commands to run before running tests'
         required: false
@@ -41,12 +46,24 @@ jobs:
     name: TFLint
     runs-on: ubuntu-latest
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v4
 
       - name: Tflint
         id: tflint
-        uses: TykTechnologies/actions/tflint@${{inputs.branch}}
+        if: ${{ !inputs.testmode }}
+        uses: TykTechnologies/actions/tflint@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        if: ${{ inputs.testmode }}
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Tflint_local_test_pr
+        id: tflint_local
+        if: ${{ inputs.testmode }}
+        uses: ./.github/actions/tflint_local_test_pr
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -60,8 +77,6 @@ jobs:
       TF_PLUGIN_CACHE_DIR: /tmp/.terraform/plugins
       TERRAFORM_VERSION: 0.12.31
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v4
 
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
@@ -76,8 +91,21 @@ jobs:
 
       - name: Terraform Format, Lint and Validate
         id: terraform-format
-        uses: TykTechnologies/actions/terraform-format@${{inputs.branch}}
+        uses: TykTechnologies/actions/terraform-format@main
         with:
           terraform_version: ${{ matrix.terraform_version }}
-          branch: ${{ inputs.branch }}
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        if: ${{ inputs.testmode }}
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Terraform Format, Lint and Validate
+        id: terraform-format_local_pr
+        if: ${{ inputs.testmode }}
+        uses: ./.github/actions/terraform-format
+        with:
+          terraform_version: ${{ matrix.terraform_version }}
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}     
