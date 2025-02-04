@@ -72,15 +72,14 @@ jobs:
         with:
           terraform_version: ${{ matrix.terraform_version }}
 
-      # - name: Before script
-      #   run: |
-      #     ${{ inputs.before_script }}
-      #   shell: bash
+      - name: Before script
+        run: |
+          ${{ inputs.before_script }}
+        shell: bash
 
-
-      # - name: Checkout repository
-      #   if: ${{ inputs.testmode }}      
-      #   uses: actions/checkout@v4
+      - name: Checkout repository
+        if: ${{ inputs.testmode }}      
+        uses: actions/checkout@v4
       #   with:
       #     ref: ${{ github.head_ref }}
 
