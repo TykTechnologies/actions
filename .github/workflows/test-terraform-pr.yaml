@@ -8,6 +8,6 @@ jobs:
   test:
     uses: ./.github/workflows/terraform-pr.yaml
     with:
-      terraform_versions: "0.12.31 1.0.11"
+      terraform_versions: "0.12.31,1.0.11"
       before_script: "echo 'Running pre-test script'"
       testmode: true
