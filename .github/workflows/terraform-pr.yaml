@@ -52,7 +52,7 @@ jobs:
       - name: Tflint
         id: tflint
         if: ${{ !inputs.testmode }}
-        uses: TykTechnologies/actions/tflint@main
+        uses: TykTechnologies/actions/.github/actions/tflint@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -89,9 +89,9 @@ jobs:
         with:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}          
 
-      # - name: Terraform Format, Lint and Validate
-      #   if: ${{ !inputs.testmode }}
-      #   id: terraform-format
-      #   uses: TykTechnologies/actions/terraform-format@main
-      #   with:
-      #     TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
+      - name: Terraform Format, Lint and Validate
+        if: ${{ !inputs.testmode }}
+        id: terraform-format
+        uses: TykTechnologies/actions/.github/actions/terraform-format@main
+        with:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
