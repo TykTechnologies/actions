@@ -48,13 +48,13 @@ runs:
     - name: Terraform init
       shell: bash
       run: terraform init
-      with:
+      env:
         TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
 
     - name: Terraform validate
       shell: bash
       run: terraform validate
-      with:
+      env:
         TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
 
     - name: Terraform fmt
