@@ -51,9 +51,9 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        if: ${{ inputs.testmode }}
-        with:
-          ref: ${{ github.head_ref }}
+        # if: ${{ inputs.testmode }}
+        # with:
+        #   ref: ${{ github.head_ref }}
 
       - name: List directory contents
         run: ls -lR /home/runner/work/actions
@@ -97,9 +97,9 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        if: ${{ inputs.testmode }}
-        with:
-          ref: ${{ github.head_ref }}
+        # if: ${{ inputs.testmode }}
+        # with:
+        #   ref: ${{ github.head_ref }}
 
       - name: Terraform Format, Lint and Validate
         id: terraform-format_local_pr
