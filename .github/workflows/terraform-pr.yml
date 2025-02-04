@@ -63,8 +63,6 @@ jobs:
         id: tflint_local
         if: ${{ inputs.testmode }}
         uses: ./github/actions/tflint_local_test_pr
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   formatter:
     name: Formatter
