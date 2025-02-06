@@ -37,13 +37,10 @@ jobs:
     name: TFLint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        if: ${{ inputs.testmode }}      
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}        
+      - name: Checkout invoker repository
+        uses: actions/checkout@v4    
 
-      - name: Run composite action
+      - name: Test action if testmode
         if: ${{ inputs.testmode }}
         uses: ./.github/actions/tflint
         with:
@@ -77,13 +74,11 @@ jobs:
           ${{ inputs.before_script }}
         shell: bash
 
-      - name: Checkout repository
+      - name: Checkout action repository if testmode
         if: ${{ inputs.testmode }}      
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
 
-      - name: Run composite action
+      - name: Test action if testmode
         if: ${{ inputs.testmode }}
         uses: ./.github/actions/terraform-format
         with:
