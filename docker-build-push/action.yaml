@@ -43,12 +43,12 @@ runs:
   steps:
     - uses: docker/setup-qemu-action@v2
 
-    - uses: docker/setup-buildx-action@v2
+    - uses: docker/setup-buildx-action@v3
       with:
         driver-opts: image=moby/buildkit:master
         install: true
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: /tmp/.buildx-cache-${{ inputs.repository_name }}
         key: ${{ runner.os }}-buildx-${{ inputs.repository_name }}-${{ github.sha }}
@@ -63,8 +63,9 @@ runs:
         tags: |
           type=sha
           type=semver,pattern={{raw}},value=${{ inputs.tags }}
+          type=raw,value=${{ inputs.tags }}
 
-    - uses: docker/build-push-action@v4
+    - uses: docker/build-push-action@v6
       with:
         context: ${{ inputs.context }}
         file: ${{ inputs.dockerfile }}
@@ -74,3 +75,9 @@ runs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=local,src=/tmp/.buildx-cache-${{ inputs.repository_name }}
         cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-${{ inputs.repository_name }}-new
+
+    - name: Move cache
+      shell: bash
+      run: |
+        rm -rf /tmp/.buildx-cache-${{ inputs.repository_name }}
+        mv /tmp/.buildx-cache-${{ inputs.repository_name }}-new /tmp/.buildx-cache-${{ inputs.repository_name }}         

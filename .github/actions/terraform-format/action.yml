@@ -1,0 +1,62 @@
+name: Terraform Formatter
+description: Runs terraform validate and format
+
+inputs:
+  terraform_version:
+    description: 'Terraform version'
+    required: true
+    default: 0.12.31
+  TF_TOKEN_app_terraform_io:
+    description: 'Terraform token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Write provider file conditionally
+      shell: bash
+      run: |
+        mkdir -p $TF_PLUGIN_CACHE_DIR
+        # Parse major and minor version from the input.
+        TFVERSION="${{ inputs.terraform_version }}"
+        MAJOR="$(echo "${TFVERSION}" | cut -d. -f1)"
+        MINOR="$(echo "${TFVERSION}" | cut -d. -f2)"
+
+        # Decide what to put into the Helm provider block
+        HELM_PROVIDER_VERSION=""
+        if [ "$MAJOR" -eq 0 ] && [ "$MINOR" -lt 13 ]; then
+          HELM_PROVIDER_VERSION='  version = "~> 2.0"'
+        fi
+
+        # Write one provider file, inserting our dynamic Helm version
+        cat <<EOF > provider.ci.tf
+
+        provider "aws" {
+          region = "eu-central-1"
+        }
+        
+        provider "kubernetes" {}
+
+        provider "helm" {
+        ${HELM_PROVIDER_VERSION}
+        }
+        EOF
+
+        # Format the file
+        terraform fmt -write=true provider.ci.tf
+
+    - name: Terraform init
+      shell: bash
+      run: terraform init
+      env:
+        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
+
+    - name: Terraform validate
+      shell: bash
+      run: terraform validate
+      env:
+        TF_TOKEN_app_terraform_io: ${{ inputs.TF_TOKEN_app_terraform_io }}
+
+    - name: Terraform fmt
+      shell: bash
+      run: terraform fmt -check -recursive -diff .
