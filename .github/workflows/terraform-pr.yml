@@ -32,7 +32,6 @@ jobs:
           matrix=$(echo $versions | jq -R 'split(",") | map({terraform_version: .})'| jq -c .)
           echo "matrix={\"include\": ${matrix}}" >> $GITHUB_OUTPUT
 
-
   tflint:
     name: TFLint
     runs-on: ubuntu-latest
